@@ -1,4 +1,3 @@
-"""测试融合网络"""
 import argparse
 import os
 import random
@@ -9,10 +8,8 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
-from torch.nn.parallel import DataParallel
-from timm.models.layers import DropPath, to_2tuple, trunc_normal_
+from timm.models.layers import to_2tuple, trunc_normal_
 from Networks.network import MODEL as net
-# from Networks.network5 import MODEL as net
 from msrs_data import MSRS_data
 from commons import YCrCb2RGB, RGB2YCrCb, clamp
 from fvcore.nn import FlopCountAnalysis
@@ -26,8 +23,6 @@ def params_count(model):
   return np.sum([p.numel() for p in model.parameters()]).item()
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1" 
 def init_seeds(seed=0):
-    # Initialize random number generator (RNG) seeds https://pytorch.org/docs/stable/notes/randomness.html
-    # cudnn seed 0 settings are slower and more reproducible, else faster and less reproducible
     import torch.backends.cudnn as cudnn
     random.seed(seed)
     np.random.seed(seed)
@@ -39,14 +34,14 @@ def init_seeds(seed=0):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch PIAFusion')
-    parser.add_argument('--dataset_path', metavar='DIR', default='/scratch/test',
+    parser.add_argument('--dataset_path', metavar='DIR', default='/scratch/zenghui/MyDatasets/CT-MRI/test',
                         help='path to dataset (default: imagenet)')  # 测试数据存放位置
     parser.add_argument('-a', '--arch', metavar='ARCH', default='fusion_model',
                         choices=['fusion_model'])
-    parser.add_argument('--save_path', default='/home/100')  # 融合结果存放位置
+    parser.add_argument('--save_path', default='/home/zenghui/experiment/3/AMoENet/result/1/')  # 融合结果存放位置
     parser.add_argument('-j', '--workers', default=1, type=int, metavar='N',
                         help='number of data loading workers (default: 4)')
-    parser.add_argument('--fusion_pretrained', default='/home/model_20.pth',
+    parser.add_argument('--fusion_pretrained', default='/home/zenghui/experiment/3/AMoENet/models/model.pth',
                         help='use fusion pre-trained model')
     parser.add_argument('--seed', default=0, type=int,
                         help='seed for initializing training. ')
