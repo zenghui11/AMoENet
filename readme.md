@@ -17,7 +17,6 @@ python test.py
 ## File Structure
 
 - `test.py`: Main file to earn the result.
-- `Networks`: Dependencies required to run the project.
 
 
 ## Dependencies
